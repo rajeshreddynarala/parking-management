@@ -30,6 +30,9 @@ def init_db():
             for slot in range(1, SLOTS_PER_FLOOR + 1):
                 conn.execute("INSERT OR IGNORE INTO slots (floor, slot_number) VALUES (?, ?)", (floor, slot))
 
+# Create the database when the app starts locally or on a hosting service.
+init_db()
+
 @app.route("/")
 def index():
     with db() as conn:
@@ -98,5 +101,4 @@ def records():
     return render_template("records.html", records=rows)
 
 if __name__ == "__main__":
-    init_db()
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)
