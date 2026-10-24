@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block title %}Vehicle Entry | ParkSmart{% endblock %}{% block content %}
+<section class="page-heading"><div><p class="eyebrow">NEW PARKING SESSION</p><h1>Vehicle entry</h1><p class="subheading">Register a vehicle and allocate the first available slot.</p></div></section>
+<div class="form-layout"><form class="panel form-panel" method="post"><label for="vehicle_number">Vehicle registration number</label>
+<input id="vehicle_number" name="vehicle_number" placeholder="e.g. AP05AB1234" maxlength="20" required autofocus>
+<label for="vehicle_type">Vehicle type</label><select id="vehicle_type" name="vehicle_type"><option>Car</option><option>Bike</option><option>SUV</option><option>Van</option><option>Other</option></select>
+<button class="button full" type="submit">Register and allocate slot</button><a class="cancel-link" href="{{ url_for('index') }}">Cancel</a></form>
+<aside class="panel info-panel"><div class="info-icon">i</div><h2>How allocation works</h2><p>The system checks all five floors and assigns the first available slot, starting at Floor 1.</p>
+<p>A slot becomes available again when checkout is recorded.</p><p class="rate-note">Demo rate: ₹20 per started hour.</p></aside></div>{% endblock %}
