@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}Dashboard | ParkSmart{% endblock %}{% block content %}
+<section class="page-heading"><div><p class="eyebrow">CONTROL CENTER</p><h1>Parking dashboard</h1><p class="subheading">Monitor vehicle occupancy across all five floors.</p></div><a class="button" href="{{ url_for('entry') }}">+ Register vehicle</a></section>
+<section class="stats">
+<article class="stat-card"><span>Total slots</span><strong>{{ totals.total }}</strong><small>Across 5 floors</small></article>
+<article class="stat-card"><span>Occupied</span><strong>{{ totals.occupied }}</strong><small>Currently in use</small></article>
+<article class="stat-card"><span>Available</span><strong>{{ totals.available }}</strong><small>Ready to use</small></article>
+<article class="stat-card"><span>Active vehicles</span><strong>{{ totals.active }}</strong><small>Currently parked</small></article></section>
+<section class="section-heading"><div><h2>Floor availability</h2><p>Green means available; red means occupied.</p></div></section>
+<section class="floor-grid">{% for floor in floors %}<article class="floor-card"><div class="floor-title"><div><span class="floor-label">LEVEL {{ floor.number }}</span><h3>Floor {{ floor.number }}</h3></div><span class="availability">{{ floor.available }} free</span></div>
+<div class="progress"><span style="width: {{ (floor.occupied / floor.total * 100) if floor.total else 0 }}%"></span></div>
+<p class="floor-summary">{{ floor.occupied }} occupied · {{ floor.available }} available of {{ floor.total }}</p><div class="slots">{% for slot in floor.slots %}
+<span class="slot {{ 'occupied' if slot.status == 'Occupied' else 'free' }}">S{{ slot.slot_number }}</span>{% endfor %}</div></article>{% endfor %}</section>
+<section class="section-heading"><div><h2>Currently parked</h2><p>Vehicles with an active parking session.</p></div><a class="text-link" href="{{ url_for('records') }}">View all records →</a></section>
+<div class="table-wrap"><table><thead><tr><th>Vehicle number</th><th>Type</th><th>Floor</th><th>Slot</th><th>Entry time</th><th>Action</th></tr></thead><tbody>
+{% for row in active %}<tr><td><strong>{{ row.vehicle_number }}</strong></td><td>{{ row.vehicle_type }}</td><td>{{ row.floor }}</td><td>{{ row.slot_number }}</td><td>{{ row.entry_time }}</td><td><form method="post" action="{{ url_for('vehicle_exit', session_id=row.id) }}" onsubmit="return confirm('Record vehicle exit?')"><button class="small-button" type="submit">Check out</button></form></td></tr>
+{% else %}<tr><td colspan="6" class="empty">No vehicles are currently parked.</td></tr>{% endfor %}</tbody></table></div>{% endblock %}
